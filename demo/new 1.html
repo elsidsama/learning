@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <style>
+	div{
+		width:610px;
+		height:610px;
+		margin:0px auto;
+	}
+  </style>
+
+ </head>
+ <body>
+  <div>
+	<canvas id="canvas" width="600px" height="600px" style="border:1px solid #ccc;"></canvas>
+  </div>
+  <script>
+	var canvas=document.getElementById("canvas");
+	var context=canvas.getContext("2d");
+	context.fillStyle="#0ff";
+	var ban={
+		X:20,
+		Y:20,
+		H:1,//水平方向
+		V:1,//垂直方向
+		h:null,//水平的方向增量
+		v:null,//垂直的方向增量
+		timer:null,
+		init:function(){
+			var me=this;
+			me.h=me.rFn();
+			me.v=me.rFn();
+			me.timer=setInterval(me.move.bind(this),5);
+		},
+		newRect:function(x,y){//刷新页面
+			context.clearRect(0,0,canvas.width,canvas.height);
+			context.fillRect(x,y,50,50);
+		},
+		move:function(){//移动方块
+			//如果碰到左边
+			if(this.X==0){
+				this.H=-this.H;
+				this.h=this.rFn();
+			}
+			//如果碰到右边
+			if((this.X+50)==canvas.width){
+				this.H=-this.H;
+				this.h=this.rFn();
+			}
+			//如果碰到上边
+			if(this.Y==0){
+				this.V=-this.V;
+				this.v=this.rFn();
+			}
+			//如果碰到下边
+			if((this.Y+50)==canvas.width){
+				(this.V=-this.V);
+				this.v=this.rFn();
+			}
+			//
+			this.X+=(this.H*this.h);
+			this.Y+=(this.V*this.v);
+
+			(this.X+50)>=canvas.width&&(this.X=canvas.width-50);
+			this.X<=0&&(this.X=0);
+			(this.Y+50)>=canvas.height&&(this.Y=canvas.height-50);
+			this.Y<=0&&(this.Y=0);
+			this.newRect(this.X,this.Y);
+		},
+		rFn:function(){//随机生成数字
+			return Math.floor(Math.random()*10)+1;
+		},
+	}
+	//
+	window.onload=function(){
+		ban.init();
+	}
+  </script>
+ </body>
+</html>
